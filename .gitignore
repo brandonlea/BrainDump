@@ -8,4 +8,7 @@ media
 
 # User
 .venv
-.idea
+.idea/*
+*.iws
+*.iml
+*.ipr
