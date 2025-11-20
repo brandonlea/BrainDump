@@ -22,6 +22,10 @@ BrainDump is a full-stack community discussion platform built with Django and Py
 - [Features](#features)
   - [Existing Features](#existing-features)
   - [Future Enhancements](#future-enhancements)
+- [Database Design](#database-design)
+  - [Data Schema](#data-schema)
+  - [Entity Relationship Diagram](#entity-relationship-diagram)
+  - [Data Models](#data-models)
 
 ---
 
@@ -497,6 +501,107 @@ All decisions serve the core goal: **making discourse feel less formal and more 
 - Rich text editor with image uploads and markdown
 - Private messaging between users
 - User following system and personalized feeds
+
+[Back to Top](#contents)
+
+---
+
+## Database Design
+
+### Data Schema
+
+BrainDump uses PostgreSQL with Django ORM for robust, relational data storage that supports all CRUD operations while maintaining referential integrity.
+
+**Design Principles:**
+- Normalized database structure (3NF) to minimize redundancy
+- Proper foreign key relationships with CASCADE deletion
+- Indexed fields for optimized query performance
+- Data validation at both model and database levels
+
+---
+
+### Entity Relationship Diagram
+
+![Database ERD](docs/erd/erd.png)
+
+**Core Entities:**
+- **User** (Django's built-in auth_user table)
+- **Post** (User-created content)
+- **Comment** (Discussion on posts)
+- **Vote** (Upvotes/downvotes on posts and comments)
+
+**Relationships:**
+- User → Post (One-to-Many): One user creates many posts
+- User → Comment (One-to-Many): One user creates many comments
+- User → Vote (One-to-Many): One user creates many votes
+- Post → Comment (One-to-Many): One post has many comments
+- Post → Vote (One-to-Many): One post has many votes
+- Comment → Vote (One-to-Many): One comment has many votes
+
+---
+
+### Data Models
+
+#### User Table
+Django's default `auth_user` table with fields:
+- `id` (Primary Key) - Unique user identifier
+- `username` (Unique, max 150 chars) - User's display name
+- `email` (Unique) - User's email address
+- `password` (Hashed) - Argon2 hashed password
+- `is_staff` (Boolean) - Admin access flag
+- `is_active` (Boolean) - Account status
+- `date_joined` (DateTime) - Registration timestamp
+
+#### Post Table
+- `id` (Primary Key) - Unique post identifier
+- `title` (CharField, max 200) - Post title
+- `content` (TextField, max 5000) - Post body content
+- `category` (CharField) - One of 6 predefined categories
+- `vibe` (CharField) - One of 4 mood options
+- `created_at` (DateTime) - Post creation timestamp
+- `updated_at` (DateTime) - Last edit timestamp
+- `author_id` (Foreign Key → User) - Post author reference
+
+**Constraints:**
+- `category` must be: 'oops', 'pets', 'existential', 'shower', 'brain', 'plot'
+- `vibe` must be: 'chaotic', 'silly', 'existential', 'mindblowing'
+- ON DELETE CASCADE for author_id
+- Indexed: author_id, category, created_at
+
+#### Comment Table
+- `id` (Primary Key) - Unique comment identifier
+- `content` (TextField, max 2000) - Comment text
+- `created_at` (DateTime) - Comment creation timestamp
+- `updated_at` (DateTime) - Last edit timestamp
+- `author_id` (Foreign Key → User) - Comment author reference
+- `post_id` (Foreign Key → Post) - Parent post reference
+
+**Constraints:**
+- ON DELETE CASCADE for author_id and post_id
+- Indexed: author_id, post_id, created_at
+
+#### Vote Table
+- `id` (Primary Key) - Unique vote identifier
+- `vote_type` (Integer) - 1 for upvote, -1 for downvote
+- `created_at` (DateTime) - Vote timestamp
+- `user_id` (Foreign Key → User) - Voter reference
+- `post_id` (Foreign Key → Post, nullable) - Post being voted on
+- `comment_id` (Foreign Key → Comment, nullable) - Comment being voted on
+
+**Constraints:**
+- Either post_id OR comment_id must be set (not both, not neither)
+- UNIQUE (user_id, post_id) - One vote per user per post
+- UNIQUE (user_id, comment_id) - One vote per user per comment
+- ON DELETE CASCADE for all foreign keys
+- Indexed: user_id, post_id, comment_id
+
+---
+
+**Database Configuration:**
+- **Development**: SQLite3 for local development
+- **Production**: PostgreSQL on Heroku for robust, scalable data storage
+- **Migrations**: All schema changes tracked via Django migrations
+- **Backup**: Heroku automated daily backups with 7-day retention
 
 [Back to Top](#contents)
 
