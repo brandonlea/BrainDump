@@ -19,6 +19,9 @@ BrainDump is a full-stack community discussion platform built with Django and Py
     - [Color Scheme](#color-scheme)
     - [Typography](#typography)
     - [UX Design Principles](#ux-design-principles)
+- [Features](#features)
+  - [Existing Features](#existing-features)
+  - [Future Enhancements](#future-enhancements)
 
 ---
 
@@ -348,3 +351,154 @@ Some design choices deliberately differ from conventional patterns:
 All decisions serve the core goal: **making discourse feel less formal and more enjoyable** while maintaining usability standards.
 
 [Back to Top](#contents)
+
+---
+
+## Features
+
+### Existing Features
+
+#### 1. User Authentication & Authorization
+
+
+**Description:** Secure user registration, login, and session management using Django's built-in authentication system.
+
+**Features:**
+- User registration with email and password
+- Secure password hashing using Argon2 algorithm
+- Remember Me functionality for persistent sessions
+- Password reset via email
+- Login required for creating posts/comments
+- Users can only edit/delete their own content
+- Admin users have elevated permissions for moderation
+
+**User Benefit:** Creates persistent identity, protects user data, and ensures only authorized users can modify content.
+
+---
+
+#### 2. Post Management (Full CRUD)
+
+
+**Create:** Users can create posts with:
+- Title (max 200 characters)
+- Content (max 5000 characters)
+- Category selection (6 humorous options)
+- Vibe/mood selector (Chaotic, Silly, Existential, Mindblowing)
+
+**Read:** All users can:
+- Browse posts in feed (reverse chronological order)
+- View full post details
+- Filter by category
+- Sort by newest, most voted, most commented
+
+**Update:** Post authors can:
+- Edit title, content, category, vibe
+- Changes reflected immediately
+- Updated timestamp tracked automatically
+
+**Delete:** Post authors can:
+- Delete posts with confirmation modal
+- Associated comments and votes removed automatically
+- Success feedback and redirect to feed
+
+**User Benefit:** Complete control over own content with intuitive interface.
+
+---
+
+#### 3. Commenting System
+
+
+**Features:**
+- Comment form below each post
+- Comments display author, timestamp, content, votes
+- Comments listed chronologically (oldest first)
+- Edit/Delete buttons for own comments
+- Comment voting system
+- Empty state with friendly message
+
+**User Benefit:** Enables discussion and community engagement directly on posts.
+
+---
+
+#### 4. Voting System
+
+
+**Features:**
+- Upvote button increases count by 1
+- Downvote button decreases count by 1
+- Clicking same button removes vote
+- One vote per user per post/comment (database enforced)
+- Cannot vote on own content
+- Vote count color-coded by score
+- Immediate UI updates without page reload
+
+**User Benefit:** Community-curated content where best posts rise to top.
+
+---
+
+#### 5. Category Filtering
+
+
+**Categories Available:**
+1. **Everything** (All posts - default view)
+2. **Oops I Did It Again** (Embarrassing mistakes)
+3. **Pet Nonsense** (Funny pet stories)
+4. **Existential Dread** (Deep life questions)
+5. **Shower Thoughts** (Random realizations)
+6. **Brain Farts** (Silly forgetful moments)
+7. **Plot Twists** (Unexpected endings)
+
+**Features:**
+- Category sidebar with post counts
+- Active category highlighted
+- Filter persists in URL
+- Sticky sidebar on desktop
+
+**User Benefit:** Focus on topics of interest without scrolling through irrelevant content.
+
+---
+
+#### 6. Responsive Design
+
+
+**Features:**
+- Mobile (<768px): Single column, stacked layout, hamburger menu
+- Tablet (768-1023px): Two columns with visible sidebar
+- Desktop (1024px+): Three columns with sticky sidebars
+- Fluid typography scales appropriately
+- Touch targets minimum 44x44px on mobile
+- No horizontal scrolling at any width
+
+**User Benefit:** Seamless experience on any device, anywhere.
+
+---
+
+#### 7. Time-Based Display
+
+**Features:**
+- Relative timestamps: 2s ago, 5m ago, 3h ago, 2d ago
+- Hover shows exact date/time
+- Applied to posts and comments
+
+**User Benefit:** Quickly understand content freshness without reading full dates.
+
+---
+
+### Future Enhancements
+
+**Phase 2 (Immediate Improvements):**
+- User profiles with post history and karma scores
+- Email notifications for comment replies
+- Search functionality across posts and comments
+- Advanced sorting algorithms (trending, hot, controversial)
+
+**Phase 3 (Advanced Features):**
+- Nested comment threads with collapsible sections
+- Rich text editor with image uploads and markdown
+- Private messaging between users
+- User following system and personalized feeds
+
+[Back to Top](#contents)
+
+---
+
