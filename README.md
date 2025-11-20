@@ -11,7 +11,9 @@ BrainDump is a full-stack community discussion platform built with Django and Py
 - [Project Goals](#project-goals)
   - [User Goals](#user-goals)
   - [Site Owner Goals](#site-owner-goals)
-
+- [User Experience (UX)](#user-experience-ux)
+  - [Target Audience](#target-audience)
+  - [User Stories](#user-stories)
 
 ---
 
@@ -75,3 +77,86 @@ As the site owner, I want to:
 - **Demonstrate technical proficiency** in full-stack development with Django framework
 - **Implement secure, scalable practices** following industry standards
 - **Maintain the platform** with clear, well-documented code structure
+
+### Development Goals
+
+This project successfully demonstrates:
+- ✅ Full-stack web application using Python and Django framework
+- ✅ Custom responsive HTML and CSS with modern design principles
+- ✅ Database-backed data storage using PostgreSQL in production
+- ✅ Complete CRUD (Create, Read, Update, Delete) functionality
+- ✅ User authentication and authorization with Django's built-in system
+- ✅ Relational data modeling with proper relationships between entities
+- ✅ Security best practices including environment variables and password hashing
+- ✅ Comprehensive manual testing with documented results
+- ✅ Cloud deployment to Heroku with production configuration
+- ✅ Version control with meaningful Git commits throughout development
+- ✅ Code following PEP8 style guidelines and W3C validation standards
+
+[Back to Top](#contents)
+
+---
+
+## User Experience (UX)
+
+### Target Audience
+
+**Primary Audience:**
+- Casual internet users (ages 18-45) who enjoy storytelling and humor
+- Community seekers looking for less formal, personality-driven platforms
+- Content creators who want to share experiences without academic pressure
+- Digital natives who expect modern, responsive web interfaces
+
+**Secondary Audience:**
+- Students and professionals seeking lighter discussion platforms for downtime
+- People tired of corporate social media looking for smaller, friendlier communities
+- Anyone who enjoys quirky, humorous content and casual discourse
+
+**User Needs Analysis:**
+The target audience needs:
+1. **Instant gratification** - Quick posting without complex forms or delays
+2. **Visual appeal** - Modern, colorful design that's enjoyable to use
+3. **Intuitive navigation** - No learning curve; obvious action buttons
+4. **Mobile accessibility** - Seamless experience on phones and tablets
+5. **Community feedback** - Immediate response to their contributions
+6. **Data security** - Confidence that their information is protected
+7. **Reliability** - Fast loading times and consistent performance
+
+[Back to Top](#contents)
+
+---
+
+### User Stories
+
+**First-Time Visitor:**
+- As a first-time visitor, I want to immediately understand the site's purpose without reading documentation
+- As a first-time visitor, I want to browse content without creating an account to evaluate the community
+- As a first-time visitor, I want to easily find different content categories
+- As a first-time visitor, I want the interface to work perfectly on my mobile device
+- As a first-time visitor, I want to create an account quickly with minimal required information
+
+**Registered User:**
+- As a registered user, I want to log in securely and have my session remembered
+- As a registered user, I want to create new posts with title, content, category, and mood
+- As a registered user, I want to edit my own posts if I make a mistake or want to update content
+- As a registered user, I want to delete my posts if I no longer want them public
+- As a registered user, I want to leave comments on other people's posts
+- As a registered user, I want to vote on posts and comments to influence content ranking
+- As a registered user, I want to see my voting reflected immediately in the interface
+- As a registered user, I want immediate feedback when I perform actions
+
+**Frequent User:**
+- As a frequent user, I want to view my post history and see all contributions I've made
+- As a frequent user, I want to filter content by category to focus on topics I care about
+- As a frequent user, I want consistent performance across all devices I use
+- As a frequent user, I want the site to remember my preferences
+
+**Site Administrator:**
+- As an administrator, I want to moderate content that violates community guidelines
+- As an administrator, I want to manage user accounts and handle reports
+- As an administrator, I want to access Django admin panel for database management
+- As an administrator, I want secure deployment with no exposed credentials
+
+[Back to Top](#contents)
+
+---
