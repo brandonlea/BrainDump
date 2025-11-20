@@ -14,6 +14,11 @@ BrainDump is a full-stack community discussion platform built with Django and Py
 - [User Experience (UX)](#user-experience-ux)
   - [Target Audience](#target-audience)
   - [User Stories](#user-stories)
+  - [Design](#design)
+    - [Wireframes](#wireframes)
+    - [Color Scheme](#color-scheme)
+    - [Typography](#typography)
+    - [UX Design Principles](#ux-design-principles)
 
 ---
 
@@ -160,3 +165,186 @@ The target audience needs:
 [Back to Top](#contents)
 
 ---
+
+---
+
+### Design
+
+#### Wireframes
+
+Wireframes were created using Balsamiq following a mobile-first approach, prioritizing content readability and interaction simplicity across all screen sizes.
+
+**Mobile Wireframe (320px - 767px)**
+
+![Mobile Wireframe](docs/wireframes/Mobile.png)
+
+- Single column layout maximizes content width on small screens
+- Sticky header keeps branding and main CTA accessible
+- Collapsible sidebar accessed via hamburger menu saves vertical space
+- Large touch targets for all interactive elements (minimum 44x44px)
+- Bottom-aligned primary CTA for thumb accessibility
+
+**Tablet Wireframe (768px - 1023px)**
+
+![Tablet Wireframe](docs/wireframes/Tablet.png)
+
+- Two-column grid introduces sidebar for categories (25% width)
+- Sticky category sidebar provides quick filtering without scrolling
+- Wider post cards with more visible metadata
+- Expanded header with room for user profile dropdown
+
+**Desktop Wireframe (1024px+)**
+
+![Desktop Wireframe](docs/wireframes/Desktop.png)
+
+- Three-column layout maximizes wide screens
+- Left sidebar: Categories (20% width)
+- Center: Main post feed (60% width, max 800px for readability)
+- Right sidebar: Trending content, user info (20% width)
+- Enhanced hover states leverage mouse precision
+- Multi-line post previews showing more content
+
+[Back to Top](#contents)
+
+---
+
+#### Color Scheme
+
+BrainDump uses a vibrant, energetic color palette that differentiates it from traditional discussion platforms while maintaining WCAG AA accessibility standards.
+
+![Color Palette](docs/colors/colors.png)
+
+| Variable | Color (HEX) | Usage | Notes |
+|----------|-------------|-------|-------|
+| Purple 500 | #A855F7 | Primary buttons, active states | Creativity, imagination |
+| Pink 500 | #EC4899 | Gradient midpoints, CTAs | Friendliness, approachability |
+| Orange 500 | #F97316 | Gradient endpoints, energy accents | Energy, enthusiasm |
+| Blue 50 | #EFF6FF | Cool background tones | Trust, calmness |
+| Gray 600 | #4B5563 | Body text, metadata | Professional, readable |
+| Gray 800 | #1F2937 | Headings, emphasis | Strong contrast |
+| White | #FFFFFF | Card surfaces, button text | Clean, spacious |
+
+**Gradient Styles:**
+- **Primary CTA Gradient**: Purple → Pink → Orange (main action buttons)
+- **Chaotic Vibe**: Purple → Pink (high energy posts)
+- **Silly Vibe**: Yellow → Orange (playful posts)
+- **Existential Vibe**: Blue → Indigo (contemplative posts)
+- **Mindblowing Vibe**: Green → Teal (insightful posts)
+
+**Accessibility Testing:**
+All color combinations tested using WebAIM Contrast Checker and meet WCAG AA standards (minimum 4.5:1 for normal text, 3:1 for large text).
+
+[Back to Top](#contents)
+
+---
+
+#### Typography
+
+BrainDump uses system font stacks for optimal performance and native integration with users operating systems.
+
+**Font Family:**
+```
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, 
+             "Helvetica Neue", Arial, sans-serif;
+```
+
+**Rationale:**
+- Zero latency (no external font files to download)
+- Familiarity (uses native font of each OS)
+- Accessibility (fonts optimized for screen reading)
+- Performance (eliminates render-blocking requests)
+
+**Font Weights:**
+- **Headings**: 800-900 (ExtraBold/Black) - Maximum impact for titles
+- **Body Text**: 500 (Medium) - More readable than regular weight
+- **Metadata**: 500-600 (Medium/SemiBold) - Legible at smaller sizes
+- **Buttons**: 900 (Black) - Commands attention
+- **Captions**: 400 (Regular) - Visually de-emphasized
+
+**Font Sizing (Mobile-First Approach):**
+- Body: 16px minimum (prevents iOS zoom on input focus)
+- H1: 32px → 48px (scales up on desktop)
+- H2: 24px → 36px
+- H3: 20px → 24px
+- Small text: 14px minimum
+
+All typography meets WCAG 2.1 Level AA standards with proper line height (1.5+) and letter spacing for optimal readability.
+
+[Back to Top](#contents)
+
+---
+
+---
+
+#### UX Design Principles
+
+BrainDump follows five core UX principles to ensure an intuitive, accessible, and enjoyable user experience.
+
+**1. Information Hierarchy**
+
+The site uses semantic HTML5 structure and visual hierarchy to make content easily scannable:
+- Large, bold post titles immediately catch attention
+- Vote counts prominently displayed but don't overpower content
+- Category badges use gradient backgrounds for visual separation
+- Metadata (author, timestamp) consistently positioned
+- Clear visual boundaries between posts using spacing and shadows
+
+**Justification:** This approach allows users to scan content quickly and find what they need without reading every word. Consistent positioning creates familiarity that speeds up navigation.
+
+**2. User Control**
+
+Users initiate all actions with clear feedback:
+- No autoplay media or aggressive pop-ups
+- Voting provides immediate visual feedback
+- Forms can be cancelled without submitting
+- Clear error messages explain problems and solutions
+- Success confirmations after all actions
+- Users redirected appropriately after completing tasks
+
+**Justification:** When users feel in control and receive clear feedback, they're more confident using the platform. The playful tone reduces anxiety around making mistakes.
+
+**3. Consistency**
+
+Similar elements behave similarly throughout the site:
+- Border radius and styling uniform across all cards
+- Gradient colors applied consistently to primary CTAs
+- Vote buttons always positioned on left side
+- All forms follow identical layout patterns
+- Navigation elements behave predictably across pages
+
+**Justification:** Consistency reduces cognitive load. Once users learn how one feature works, they can predict how others will work.
+
+**4. Confirmation**
+
+Users receive feedback on their actions:
+- Vote counts update immediately when clicked
+- Form submissions show success messages
+- Button hover states confirm clickability
+- Page titles update to reflect current state
+- Loading states indicate when data is being fetched
+
+**Justification:** Clear confirmation prevents user anxiety ("Did my action work?") and reduces repeated actions.
+
+**5. Accessibility**
+
+The site follows WCAG 2.1 Level AA guidelines:
+- Semantic HTML5 elements throughout
+- Keyboard navigation fully supported (Tab, Enter, Escape)
+- Color contrast meets AA standards (4.5:1 for text)
+- All form inputs have associated labels
+- Touch targets meet minimum size (44x44px on mobile)
+- Screen reader compatible with ARIA labels
+
+**Justification:** Accessibility is legally required and morally right. Making the platform usable by everyone increases the potential user base and creates a more inclusive community.
+
+**Design Decisions:**
+
+Some design choices deliberately differ from conventional patterns:
+- **Vibrant gradients** used extensively for modern, dynamic feel appropriate for younger audience
+- **Playful microcopy** ("Brain Zones," "Dump Thoughts") creates personality and differentiates from sterile platforms
+- **Animated hover states** enhance playful feel and provide clear affordance
+- **Informal error messages** maintain friendly tone even during errors
+
+All decisions serve the core goal: **making discourse feel less formal and more enjoyable** while maintaining usability standards.
+
+[Back to Top](#contents)
