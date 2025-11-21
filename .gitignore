@@ -12,3 +12,7 @@ media
 *.iws
 *.iml
 *.ipr
+*.sqlite3
+.env
+.env.local
+*.env
