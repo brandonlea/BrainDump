@@ -31,6 +31,12 @@ BrainDump is a full-stack community discussion platform built with Django and Py
   - [Frameworks and Libraries](#frameworks-and-libraries)
   - [Database](#database)
   - [Tools](#tools)
+- [Deployment](#deployment)
+  - [Local Development](#local-development)
+  - [Heroku Deployment](#heroku-deployment)
+  - [Environment Variables](#environment-variables)
+- [Security Features](#security-features)
+- [Credits](#credits)
 
 ---
 
@@ -659,6 +665,455 @@ Django's default `auth_user` table with fields:
 **Deployment:**
 - [Heroku](https://www.heroku.com/) - Cloud platform for hosting
 - [Heroku PostgreSQL](https://www.heroku.com/postgres) - Managed database service
+
+[Back to Top](#contents)
+
+---
+
+## Deployment
+
+### Local Development
+
+#### Prerequisites
+
+Before running BrainDump locally, ensure you have:
+- Python 3.11 or higher installed
+- pip (Python package manager)
+- Git installed
+- Code editor (VS Code recommended)
+
+#### Installation Steps
+
+1. **Clone the Repository**
+
+Navigate to [GitHub Repository](https://github.com/yourusername/braindump)
+
+Click "Code" button and copy the HTTPS URL
+
+Open your terminal and run:
+```
+git clone https://github.com/yourusername/braindump.git
+cd braindump
+```
+
+2. **Create Virtual Environment**
+
+```
+python -m venv venv
+```
+
+Activate the virtual environment:
+- Windows: `venv\Scripts\activate`
+- Mac/Linux: `source venv/bin/activate`
+
+3. **Install Dependencies**
+
+```
+pip install -r requirements.txt
+```
+
+4. **Set Up Environment Variables**
+
+Create a `.env` file in the project root with:
+```
+SECRET_KEY=your-secret-key-here
+DEBUG=True
+DATABASE_URL=sqlite:///db.sqlite3
+ALLOWED_HOSTS=localhost,127.0.0.1
+```
+
+Generate a SECRET_KEY using Django's utility or online generator.
+
+5. **Run Database Migrations**
+
+```
+python manage.py migrate
+```
+
+6. **Create Superuser (Optional)**
+
+```
+python manage.py createsuperuser
+```
+
+Follow prompts to create admin account.
+
+7. **Run Development Server**
+
+```
+python manage.py runserver
+```
+
+Visit http://127.0.0.1:8000/ in your browser.
+
+Admin panel available at http://127.0.0.1:8000/admin/
+
+[Back to Top](#contents)
+
+---
+
+### Heroku Deployment
+
+BrainDump is deployed to Heroku, a cloud platform that supports Python applications.
+
+#### Prerequisites
+
+- Heroku account ([Sign up free](https://signup.heroku.com/))
+- Heroku CLI installed ([Download](https://devcenter.heroku.com/articles/heroku-cli))
+- Git repository with committed code
+
+#### Deployment Steps
+
+1. **Login to Heroku**
+
+```
+heroku login
+```
+
+This opens your browser for authentication.
+
+2. **Create Heroku App**
+
+```
+heroku create braindump-yourname
+```
+
+Or let Heroku generate a name:
+```
+heroku create
+```
+
+3. **Add PostgreSQL Database**
+
+```
+heroku addons:create heroku-postgresql:essential-0
+```
+
+This adds a free PostgreSQL database to your app.
+
+4. **Set Environment Variables**
+
+```
+heroku config:set SECRET_KEY=your-production-secret-key
+heroku config:set DEBUG=False
+heroku config:set ALLOWED_HOSTS=braindump-yourname.herokuapp.com
+```
+
+Generate a different SECRET_KEY for production.
+
+5. **Create Required Files**
+
+Ensure these files exist in your project root:
+
+**Procfile:**
+```
+web: gunicorn braindump.wsgi --log-file -
+```
+
+**runtime.txt:**
+```
+python-3.11.6
+```
+
+**requirements.txt:**
+```
+Django==4.2.7
+gunicorn==21.2.0
+psycopg2-binary==2.9.9
+dj-database-url==2.1.0
+whitenoise==6.6.0
+```
+
+6. **Update Django Settings**
+
+Ensure `settings.py` includes:
+- DEBUG=False for production
+- ALLOWED_HOSTS configured
+- Database configured with dj-database-url
+- Static files configured with Whitenoise
+- Security settings enabled (SSL redirect, secure cookies)
+
+7. **Commit Changes**
+
+```
+git add .
+git commit -m "Configure for Heroku deployment"
+```
+
+8. **Deploy to Heroku**
+
+```
+git push heroku main
+```
+
+Or if using master branch:
+```
+git push heroku master
+```
+
+9. **Run Migrations on Heroku**
+
+```
+heroku run python manage.py migrate
+```
+
+10. **Create Superuser (Optional)**
+
+```
+heroku run python manage.py createsuperuser
+```
+
+11. **Open Application**
+
+```
+heroku open
+```
+
+#### Verify Deployment
+
+Check the following:
+- ✅ Site loads without errors
+- ✅ Static files (CSS/JS) load correctly
+- ✅ Can register and login
+- ✅ CRUD operations work
+- ✅ Admin panel accessible
+- ✅ No DEBUG information visible
+
+#### View Logs
+
+If issues occur:
+```
+heroku logs --tail
+```
+
+[Back to Top](#contents)
+
+---
+
+### Environment Variables
+
+Environment variables keep sensitive information secure and allow different configurations for development and production.
+
+**Required Variables:**
+
+| Variable | Description | Development | Production |
+|----------|-------------|-------------|------------|
+| SECRET_KEY | Django secret key for cryptographic signing | Generated string | Different generated string |
+| DEBUG | Enable/disable debug mode | True | False |
+| DATABASE_URL | Database connection string | sqlite:///db.sqlite3 | Heroku PostgreSQL URL |
+| ALLOWED_HOSTS | Comma-separated allowed hostnames | localhost,127.0.0.1 | yourapp.herokuapp.com |
+
+**Setting Variables Locally:**
+
+Create `.env` file in project root:
+```
+SECRET_KEY=your-key-here
+DEBUG=True
+DATABASE_URL=sqlite:///db.sqlite3
+ALLOWED_HOSTS=localhost,127.0.0.1
+```
+
+Add `.env` to `.gitignore` to prevent committing secrets.
+
+**Setting Variables on Heroku:**
+
+```
+heroku config:set SECRET_KEY=your-key-here
+heroku config:set DEBUG=False
+```
+
+View all variables:
+```
+heroku config
+```
+
+Delete a variable:
+```
+heroku config:unset VARIABLE_NAME
+```
+
+[Back to Top](#contents)
+
+---
+
+## Security Features
+
+BrainDump implements multiple security layers following Django best practices and OWASP guidelines to protect user data and prevent common vulnerabilities.
+
+### 1. Authentication Security
+
+**Password Hashing:**
+- Uses Argon2 algorithm (OWASP recommended, most secure)
+- Passwords never stored in plaintext
+- Automatic salting prevents rainbow table attacks
+
+**Password Validation:**
+- Minimum 8 characters required
+- Cannot be similar to username/email
+- Not in list of 20,000 most common passwords
+- Cannot be entirely numeric
+
+**Session Security:**
+- HttpOnly cookies (prevents JavaScript access)
+- Secure flag in production (HTTPS only)
+- SameSite=Lax (CSRF protection)
+- 2-week expiry after inactivity
+
+### 2. CSRF Protection
+
+- CSRF token required on all POST/PUT/DELETE requests
+- Token validated server-side by Django middleware
+- Token rotates on login (prevents fixation attacks)
+- Template tag automatically generates tokens
+
+### 3. SQL Injection Prevention
+
+- Django ORM parameterizes all queries automatically
+- No raw SQL without proper parameterization
+- Input sanitization on all user data
+- Database constraints enforce data integrity
+
+### 4. XSS Prevention
+
+- Django templates auto-escape all variables by default
+- Manual escaping available when needed
+- Content Security Policy headers (future enhancement)
+- User-generated HTML stripped from content
+
+### 5. Sensitive Data Protection
+
+**Environment Variables:**
+- SECRET_KEY never committed to Git
+- Database credentials in environment only
+- .env file in .gitignore
+- Different keys for development/production
+
+**Debug Mode:**
+- DEBUG=False in production
+- No stack traces shown to users
+- Custom error pages (404, 403, 500)
+- Secure error logging (future)
+
+### 6. Authorization & Access Control
+
+**Object-Level Permissions:**
+- Users can only edit/delete own content
+- Login required decorators on protected views
+- Admin-only views for moderation
+- 403 Forbidden on unauthorized access
+
+**User Permissions:**
+- Non-admin cannot edit other users' posts
+- Cannot vote on own content
+- Cannot access admin panel without staff flag
+
+### 7. HTTPS & Transport Security
+
+**Production Settings:**
+- SSL redirect enabled (HTTP → HTTPS)
+- HSTS headers configured (1 year)
+- Secure cookies (HTTPS only)
+- Heroku provides free SSL certificate
+
+### 8. Input Validation
+
+**Form Validation:**
+- Django forms validate all inputs
+- Maximum length enforcement
+- HTML tag stripping
+- Model-level validators
+
+**Data Constraints:**
+- Category/vibe must match predefined choices
+- Foreign keys enforce referential integrity
+- Unique constraints prevent duplicates
+
+### 9. Dependency Security
+
+**Best Practices:**
+- All dependencies in requirements.txt
+- Regular updates for security patches
+- No deprecated packages
+- Minimal external dependencies
+
+### Security Testing
+
+Django security check passed:
+```
+python manage.py check --deploy
+```
+
+All common vulnerabilities tested and blocked.
+
+[Back to Top](#contents)
+
+---
+
+## Credits
+
+### Code Attribution
+
+**Frameworks and Libraries:**
+- [Django](https://www.djangoproject.com/) - Web framework (BSD License)
+- [Tailwind CSS](https://tailwindcss.com/) - CSS framework (MIT License)
+- [Lucide Icons](https://lucide.dev/) - Icon library (ISC License)
+- [gunicorn](https://gunicorn.org/) - WSGI server (MIT License)
+- [psycopg2](https://www.psycopg.org/) - PostgreSQL adapter (LGPL License)
+- [Whitenoise](http://whitenoise.evans.io/) - Static file serving (MIT License)
+
+### Learning Resources
+
+**Documentation:**
+- [Django Documentation](https://docs.djangoproject.com/) - Framework reference
+- [Code Institute LMS](https://codeinstitute.net/) - Full Stack Frameworks module
+- [MDN Web Docs](https://developer.mozilla.org/) - Web development reference
+- [Stack Overflow](https://stackoverflow.com/) - Community troubleshooting
+
+**Design Inspiration:**
+- Reddit.com - Core voting concept and community structure
+- Dribbble - Color palette inspiration
+- Modern web design patterns from Awwwards
+
+### Tools & Services
+
+**Development Tools:**
+- [Visual Studio Code](https://code.visualstudio.com/) - Code editor
+- [Git](https://git-scm.com/) - Version control
+- [GitHub](https://github.com/) - Repository hosting
+- [Balsamiq](https://balsamiq.com/) - Wireframe design
+
+**Testing Tools:**
+- [Chrome DevTools](https://developer.chrome.com/docs/devtools/)
+- [Lighthouse](https://developer.chrome.com/docs/lighthouse/overview)
+- [WAVE](https://wave.webaim.org/)
+- [W3C Validators](https://www.w3.org/)
+
+**Deployment:**
+- [Heroku](https://www.heroku.com/) - Cloud platform
+- [Heroku PostgreSQL](https://www.heroku.com/postgres) - Database hosting
+
+### Media & Content
+
+**Images:**
+- Logo and branding designed by Brandon-Lea Price
+- Mockups created with [Am I Responsive](https://ui.dev/amiresponsive)
+- Icons from Lucide (ISC License)
+
+**Content:**
+- All sample post content is original
+- No copyrighted material used
+
+### Acknowledgements
+
+**Educational Institution:**
+- This project created as part of Level 5 Diploma in Web Application Development
+- Institution: Code Institute
+- Course: Full Stack Software Development
+- Unit: Unit 3 - Back End Development
+
+**Testing Volunteers:**
+- Friends and family who provided valuable feedback during development
+- Beta testers who helped identify bugs and usability issues
 
 [Back to Top](#contents)
 
