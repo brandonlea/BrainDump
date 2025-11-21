@@ -26,6 +26,11 @@ BrainDump is a full-stack community discussion platform built with Django and Py
   - [Data Schema](#data-schema)
   - [Entity Relationship Diagram](#entity-relationship-diagram)
   - [Data Models](#data-models)
+- [Technologies Used](#technologies-used)
+  - [Languages](#languages)
+  - [Frameworks and Libraries](#frameworks-and-libraries)
+  - [Database](#database)
+  - [Tools](#tools)
 
 ---
 
@@ -607,3 +612,54 @@ Django's default `auth_user` table with fields:
 
 ---
 
+## Technologies Used
+
+### Languages
+
+- **HTML5** - Semantic markup structure for all pages
+- **CSS3** - Styling and animations with Tailwind CSS framework
+- **JavaScript** - Client-side interactivity and form handling
+- **Python** - Backend logic and Django framework
+
+### Frameworks and Libraries
+
+**Backend:**
+- [Django](https://www.djangoproject.com/) - Web framework with ORM, templating, authentication
+- [gunicorn](https://gunicorn.org/) - Production WSGI server
+- [psycopg2-binary](https://www.psycopg.org/) - PostgreSQL adapter for Python
+- [dj-database-url](https://github.com/jazzband/dj-database-url) - Database URL parsing for Heroku
+- [whitenoise](http://whitenoise.evans.io/) - Simplified static file serving
+
+**Frontend:**
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+- [Lucide Icons](https://lucide.dev/) - Clean, consistent icon library
+
+### Database
+
+- **SQLite3** - Development database (included with Python)
+- **PostgreSQL** - Production database on Heroku
+
+### Tools
+
+**Development:**
+- [Visual Studio Code](https://code.visualstudio.com/) - Code editor
+- [Git](https://git-scm.com/) - Version control
+- [GitHub](https://github.com/) - Repository hosting
+- [Balsamiq Wireframes](https://balsamiq.com/) - Wireframe design tool
+
+**Testing:**
+- [Chrome DevTools](https://developer.chrome.com/docs/devtools/) - Debugging and responsive testing
+- [Lighthouse](https://developer.chrome.com/docs/lighthouse/overview) - Performance and accessibility audits
+- [WAVE](https://wave.webaim.org/) - Web accessibility evaluation tool
+- [W3C HTML Validator](https://validator.w3.org/) - HTML markup validation
+- [W3C CSS Validator (Jigsaw)](https://jigsaw.w3.org/css-validator/) - CSS validation
+- [JSHint](https://jshint.com/) - JavaScript code quality tool
+- [Flake8](https://flake8.pycqa.org/) - Python linting (PEP8 compliance)
+
+**Deployment:**
+- [Heroku](https://www.heroku.com/) - Cloud platform for hosting
+- [Heroku PostgreSQL](https://www.heroku.com/postgres) - Managed database service
+
+[Back to Top](#contents)
+
+---
