@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Register - BrainDump{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto">
+    <!-- Register heading -->
+    <h1 class="text-3xl sm:text-4xl font-black mb-6 sm:mb-8 text-center bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+        Join BrainDump
+    </h1>
+
+    <!-- Registration form -->
+    <form method="post" class="space-y-4 sm:space-y-6">
+        {% csrf_token %}
+        
+        <!-- Username field -->
+        <div>
+            <label class="block text-gray-700 font-bold mb-2 text-sm sm:text-base">Username</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+                <p class="text-red-500 text-xs sm:text-sm mt-1">{{ form.username.errors.0 }}</p>
+            {% endif %}
+            <p class="text-gray-500 text-xs mt-1">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</p>
+        </div>
+
+        <!-- Password field -->
+        <div>
+            <label class="block text-gray-700 font-bold mb-2 text-sm sm:text-base">Password</label>
+            {{ form.password1 }}
+            {% if form.password1.errors %}
+                <p class="text-red-500 text-xs sm:text-sm mt-1">{{ form.password1.errors.0 }}</p>
+            {% endif %}
+            <p class="text-gray-500 text-xs mt-1">Your password must contain at least 8 characters and can't be too common.</p>
+        </div>
+
+        <!-- Password confirmation field -->
+        <div>
+            <label class="block text-gray-700 font-bold mb-2 text-sm sm:text-base">Confirm Password</label>
+            {{ form.password2 }}
+            {% if form.password2.errors %}
+                <p class="text-red-500 text-xs sm:text-sm mt-1">{{ form.password2.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Submit button -->
+        <button type="submit" 
+                class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-black text-base sm:text-lg hover:shadow-lg transition transform hover:-translate-y-0.5">
+            Create Account
+        </button>
+    </form>
+
+    <!-- Login link -->
+    <p class="text-center mt-4 sm:mt-6 text-gray-600 text-sm sm:text-base">
+        Already have an account? <a href="{% url 'login' %}" class="text-purple-500 font-bold hover:text-purple-700">Login here</a>
+    </p>
+</div>
+
+<style>
+    input[type="text"], input[type="password"] {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        font-family: inherit;
+        transition: border-color 0.3s;
+    }
+
+    input[type="text"]:focus, input[type="password"]:focus {
+        outline: none;
+        border-color: #a855f7;
+    }
+
+    @media (max-width: 640px) {
+        input[type="text"], input[type="password"] {
+            padding: 0.625rem 0.875rem;
+            font-size: 0.875rem;
+        }
+    }
+</style>
+{% endblock %}

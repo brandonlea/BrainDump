@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - BrainDump{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <!-- Page heading -->
+    <h1 class="text-4xl font-black mb-8 text-gray-800">{{ title }}</h1>
+
+    <!-- Post creation/edit form -->
+    <form method="post" class="space-y-6">
+        {% csrf_token %}
+
+        <!-- Title field -->
+        <div>
+            <label class="block text-gray-700 font-bold mb-2">Title</label>
+            {{ form.title }}
+            {% if form.title.errors %}
+                <p class="text-red-500 text-sm mt-1">{{ form.title.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Content field -->
+        <div>
+            <label class="block text-gray-700 font-bold mb-2">Content</label>
+            {{ form.content }}
+            {% if form.content.errors %}
+                <p class="text-red-500 text-sm mt-1">{{ form.content.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Category field -->
+        <div>
+            <label class="block text-gray-700 font-bold mb-2">Category</label>
+            {{ form.category }}
+            {% if form.category.errors %}
+                <p class="text-red-500 text-sm mt-1">{{ form.category.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Vibe field -->
+        <div>
+            <label class="block text-gray-700 font-bold mb-2">Vibe</label>
+            {{ form.vibe }}
+            {% if form.vibe.errors %}
+                <p class="text-red-500 text-sm mt-1">{{ form.vibe.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Action buttons -->
+        <div class="flex gap-4 pt-4">
+            <button type="submit"
+                    class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-4 rounded-lg font-black text-lg hover:shadow-lg transition transform hover:-translate-y-0.5">
+                🚀 YEET IT INTO THE VOID
+            </button>
+            <a href="{% url 'post_list' %}"
+               class="px-8 py-4 bg-gray-200 text-gray-700 rounded-lg font-bold hover:bg-gray-300 transition">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

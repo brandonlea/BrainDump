@@ -1,0 +1,99 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BrainDump - A community platform for sharing thoughts, stories, and ideas">
+    <meta name="author" content="Brandon">
+    <title>{% block title %}BrainDump{% endblock %}</title>
+    {% tailwind_css %}
+</head>
+<body class="bg-gradient-to-br from-purple-600 via-pink-500 to-orange-500 min-h-screen">
+    <!-- Main container with responsive padding -->
+    <div class="container mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 max-w-7xl">
+
+        <!-- Header with navigation - Accessible and responsive -->
+        <header class="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8" role="banner">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
+                <!-- Logo - Clickable, accessible -->
+                <div class="text-center sm:text-left">
+                    <a href="{% url 'post_list' %}" class="block" aria-label="BrainDump Home">
+                        <h1 class="text-3xl sm:text-4xl font-black bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 bg-clip-text text-transparent hover:opacity-80 transition">
+                            BrainDump
+                        </h1>
+                        <p class="text-gray-500 text-xs sm:text-sm mt-1">Where thoughts go to party 🎉</p>
+                    </a>
+                </div>
+
+                <!-- Navigation menu - Accessible with proper ARIA labels -->
+                <nav class="flex items-center gap-2 sm:gap-4 flex-wrap justify-center" role="navigation" aria-label="Main navigation">
+                    <a href="{% url 'post_list' %}"
+                       class="text-gray-600 hover:text-purple-500 font-medium transition text-sm sm:text-base"
+                       aria-label="Home page">
+                        Home
+                    </a>
+
+                    {% if user.is_authenticated %}
+                        <!-- Authenticated user options -->
+                        <button onclick="toggleCreateForm()"
+                                class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-black hover:shadow-lg transform hover:-translate-y-0.5 transition text-sm sm:text-base"
+                                aria-label="Create new post">
+                            Dump Thoughts
+                        </button>
+                        <span class="text-gray-600 text-xs sm:text-sm" aria-label="Logged in as {{ user.username }}">
+                            👤 {{ user.username }}
+                        </span>
+                        <form method="post" action="{% url 'logout' %}" class="inline">
+                            {% csrf_token %}
+                            <button type="submit"
+                                    class="text-gray-600 hover:text-purple-500 font-medium transition bg-transparent border-0 cursor-pointer text-sm sm:text-base"
+                                    aria-label="Logout">
+                                Logout
+                            </button>
+                        </form>
+                    {% else %}
+                        <!-- Guest user options -->
+                        <a href="{% url 'login' %}"
+                           class="bg-gray-200 text-gray-700 px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-bold hover:bg-gray-300 transition text-sm sm:text-base"
+                           aria-label="Login to your account">
+                            Login
+                        </a>
+                        <a href="{% url 'register' %}"
+                           class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-bold hover:shadow-lg transition text-sm sm:text-base"
+                           aria-label="Create new account">
+                            Register
+                        </a>
+                    {% endif %}
+                </nav>
+            </div>
+        </header>
+
+        <!-- Success/Error messages with ARIA live region for screen readers -->
+        {% if messages %}
+            <div class="mb-4 sm:mb-6 space-y-2" role="alert" aria-live="polite">
+                {% for message in messages %}
+                    <div class="{% if message.tags == 'success' %}bg-green-100 text-green-800{% elif message.tags == 'error' %}bg-red-100 text-red-800{% else %}bg-blue-100 text-blue-800{% endif %} px-4 sm:px-6 py-3 sm:py-4 rounded-lg font-medium shadow text-sm sm:text-base">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Main content area with semantic HTML -->
+        <main class="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8" role="main">
+            {% block content %}
+            {% endblock %}
+        </main>
+
+        <!-- Footer with semantic HTML -->
+        <footer class="text-center text-white mt-6 sm:mt-8 py-4 sm:py-6" role="contentinfo">
+            <p class="font-medium text-sm sm:text-base">Made with 💜 by Brandon | 2024</p>
+            <p class="text-xs sm:text-sm mt-2 opacity-75">Level 5 Diploma - Unit 3: Back End Development</p>
+        </footer>
+    </div>
+
+    <!-- External JavaScript file loaded at bottom for better performance -->
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

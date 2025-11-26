@@ -1,0 +1,240 @@
+{% extends 'base.html' %}
+
+{% block title %}BrainDump - Home{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-6 sm:gap-8">
+
+    <!-- Sidebar with category filters - Semantic navigation -->
+    <aside class="lg:col-span-1" role="complementary" aria-label="Category filters">
+        <h2 class="text-xl sm:text-2xl font-black text-purple-500 mb-4 sm:mb-6">Brain Zones</h2>
+        <nav aria-label="Post categories">
+            <ul class="space-y-2">
+                <!-- "Everything" shows all posts -->
+                <li>
+                    <a href="{% url 'post_list' %}"
+                       class="block px-3 sm:px-4 py-2 sm:py-3 rounded-lg font-medium transition text-sm sm:text-base {% if selected_category == 'everything' %}bg-purple-100 text-purple-600{% else %}text-gray-600 hover:bg-gray-100{% endif %}"
+                       {% if selected_category == 'everything' %}aria-current="page"{% endif %}>
+                        📚 Everything
+                    </a>
+                </li>
+                <!-- Category filters with proper semantic markup -->
+                {% for key, label in categories %}
+                    <li>
+                        <a href="?category={{ key }}"
+                           class="block px-3 sm:px-4 py-2 sm:py-3 rounded-lg font-medium transition text-sm sm:text-base {% if selected_category == key %}bg-purple-100 text-purple-600{% else %}text-gray-600 hover:bg-gray-100{% endif %}"
+                           {% if selected_category == key %}aria-current="page"{% endif %}>
+                            {{ label }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main feed with create form and posts -->
+    <div class="lg:col-span-3 space-y-4 sm:space-y-6">
+
+        <!-- Create post form (toggleable, only for authenticated users) -->
+        {% if user.is_authenticated %}
+            <section id="createFormContainer" class="hidden bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 p-1 rounded-xl" aria-labelledby="create-post-heading">
+                <div class="bg-white p-4 sm:p-6 rounded-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 id="create-post-heading" class="text-xl sm:text-2xl font-black bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+                            🧠 Dump Your Thoughts
+                        </h2>
+                        <button onclick="toggleCreateForm()"
+                                class="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+                                aria-label="Close create post form">
+                            ×
+                        </button>
+                    </div>
+
+                    <!-- Post creation form with proper validation and labels -->
+                    <form method="post" class="space-y-3 sm:space-y-4" novalidate>
+                        {% csrf_token %}
+
+                        <!-- Title input with validation -->
+                        <div>
+                            <label for="id_title" class="sr-only">Post Title</label>
+                            <input type="text"
+                                   id="id_title"
+                                   name="title"
+                                   placeholder="Give your thought a catchy title..."
+                                   required
+                                   maxlength="200"
+                                   class="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none font-medium text-sm sm:text-base"
+                                   aria-required="true">
+                        </div>
+
+                        <!-- Content textarea with validation -->
+                        <div>
+                            <label for="id_content" class="sr-only">Post Content</label>
+                            <textarea id="id_content"
+                                      name="content"
+                                      rows="4"
+                                      placeholder="What's on your mind?"
+                                      required
+                                      maxlength="5000"
+                                      class="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none resize-none font-medium text-sm sm:text-base"
+                                      aria-required="true"></textarea>
+                        </div>
+
+                        <!-- Category and vibe dropdowns with proper labels -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                            <div>
+                                <label for="id_category" class="sr-only">Category</label>
+                                <select id="id_category"
+                                        name="category"
+                                        required
+                                        class="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none font-medium text-sm sm:text-base"
+                                        aria-required="true">
+                                    <option value="">Select Category...</option>
+                                    <option value="oops">🤦 Oops I Did It Again</option>
+                                    <option value="pets">🐾 Pet Nonsense</option>
+                                    <option value="existential">🤔 Existential Dread</option>
+                                    <option value="shower">🚿 Shower Thoughts</option>
+                                    <option value="brain">💨 Brain Farts</option>
+                                    <option value="plot">🎬 Plot Twists</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="id_vibe" class="sr-only">Vibe</label>
+                                <select id="id_vibe"
+                                        name="vibe"
+                                        required
+                                        class="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none font-medium text-sm sm:text-base"
+                                        aria-required="true">
+                                    <option value="">Select Vibe...</option>
+                                    <option value="chaotic">🌪️ Chaotic</option>
+                                    <option value="silly">🤪 Silly</option>
+                                    <option value="existential">🤯 Existential</option>
+                                    <option value="mindblowing">💡 Mindblowing</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Submit button -->
+                        <button type="submit"
+                                class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-black text-base sm:text-lg hover:shadow-lg transition transform hover:-translate-y-0.5"
+                                aria-label="Submit your post">
+                            🚀 YEET IT INTO THE VOID
+                        </button>
+                    </form>
+                </div>
+            </section>
+        {% else %}
+            <!-- Login/Register prompt for guests -->
+            <section class="bg-purple-50 border-2 border-purple-200 p-4 sm:p-6 rounded-xl text-center" aria-labelledby="guest-prompt">
+                <h2 id="guest-prompt" class="text-purple-600 font-bold text-base sm:text-lg mb-2">Want to dump your thoughts?</h2>
+                <div class="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center">
+                    <a href="{% url 'login' %}"
+                       class="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg font-black hover:shadow-lg transition text-sm sm:text-base">
+                        Login
+                    </a>
+                    <a href="{% url 'register' %}"
+                       class="inline-block bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-bold hover:bg-gray-300 transition text-sm sm:text-base">
+                        Register
+                    </a>
+                </div>
+            </section>
+        {% endif %}
+
+        <!-- Posts feed heading -->
+        <h2 class="text-2xl sm:text-3xl font-black text-gray-800">Latest Brain Dumps</h2>
+
+        <!-- Loop through all posts with semantic HTML -->
+        {% for post in posts %}
+            <article class="bg-white border-2 border-gray-200 rounded-xl hover:shadow-xl transition">
+                <div class="flex gap-3 sm:gap-4 p-4 sm:p-6">
+
+                    <!-- Voting column with accessible buttons -->
+                    <aside class="flex flex-col items-center gap-1 sm:gap-2" aria-label="Vote controls">
+                        <!-- Upvote button -->
+                        {% if user.is_authenticated and post.author != user %}
+                            <a href="{% url 'upvote_post_feed' post.pk %}"
+                               class="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg bg-gray-100 text-gray-600 hover:bg-purple-100 font-bold transition text-sm sm:text-base"
+                               aria-label="Upvote this post">
+                                ▲
+                            </a>
+                        {% else %}
+                            <div class="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg bg-gray-100 text-gray-400 text-sm sm:text-base" aria-label="Upvote (disabled)">
+                                ▲
+                            </div>
+                        {% endif %}
+
+                        <!-- Vote score display -->
+                        <span class="text-lg sm:text-xl font-black text-purple-500" aria-label="Vote score: {{ post.vote_score|default:0 }}">
+                            {{ post.vote_score|default:0 }}
+                        </span>
+
+                        <!-- Downvote button -->
+                        {% if user.is_authenticated and post.author != user %}
+                            <a href="{% url 'downvote_post_feed' post.pk %}"
+                               class="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg bg-gray-100 text-gray-600 hover:bg-purple-100 font-bold transition text-sm sm:text-base"
+                               aria-label="Downvote this post">
+                                ▼
+                            </a>
+                        {% else %}
+                            <div class="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg bg-gray-100 text-gray-400 text-sm sm:text-base" aria-label="Downvote (disabled)">
+                                ▼
+                            </div>
+                        {% endif %}
+                    </aside>
+
+                    <!-- Post content with semantic structure -->
+                    <div class="flex-1 min-w-0">
+                        <!-- Category and vibe badges -->
+                        <div class="flex flex-wrap gap-2 mb-2 sm:mb-3">
+                            <span class="px-2 sm:px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full text-xs font-bold">
+                                {{ post.get_category_display }}
+                            </span>
+                            <span class="px-2 sm:px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-xs font-bold">
+                                {{ post.get_vibe_display }}
+                            </span>
+                        </div>
+
+                        <!-- Post title (clickable) -->
+                        <h3 class="text-lg sm:text-2xl font-bold mb-2">
+                            <a href="{% url 'post_detail' post.pk %}"
+                               class="text-gray-800 hover:text-purple-600 transition break-words">
+                                {{ post.title }}
+                            </a>
+                        </h3>
+
+                        <!-- Post content preview -->
+                        <p class="text-gray-600 mb-3 sm:mb-4 leading-relaxed text-sm sm:text-base break-words">
+                            {{ post.content|truncatewords:50 }}
+                        </p>
+
+                        <!-- Post metadata with semantic time element -->
+                        <div class="flex flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm text-gray-500">
+                            <span>👤 <strong>{{ post.author.username }}</strong></span>
+                            <time datetime="{{ post.created_at|date:'c' }}">🕐 {{ post.created_at|timesince }} ago</time>
+                            <a href="{% url 'post_detail' post.pk %}"
+                               class="text-purple-500 hover:text-purple-700 font-medium">
+                                💬 {{ post.comments.count }} comment{{ post.comments.count|pluralize }}
+                            </a>
+                            <!-- Show edit link only to post author -->
+                            {% if post.author == user %}
+                                <a href="{% url 'post_edit' post.pk %}"
+                                   class="text-blue-500 hover:text-blue-700 font-medium">
+                                    ✏️ Edit
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </article>
+        {% empty %}
+            <!-- Empty state when no posts exist -->
+            <div class="text-center py-12 sm:py-20 bg-white rounded-xl border-2 border-gray-200">
+                <p class="text-2xl sm:text-3xl mb-4" role="img" aria-label="Brain emoji">🧠</p>
+                <p class="text-xl sm:text-2xl text-gray-400 mb-4">No brain dumps yet!</p>
+                <p class="text-sm sm:text-base text-gray-500">Be the first to share your thoughts.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
