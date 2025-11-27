@@ -54,28 +54,4 @@
         Already have an account? <a href="{% url 'login' %}" class="text-purple-500 font-bold hover:text-purple-700">Login here</a>
     </p>
 </div>
-
-<style>
-    input[type="text"], input[type="password"] {
-        width: 100%;
-        padding: 0.75rem 1rem;
-        border: 2px solid #e5e7eb;
-        border-radius: 0.5rem;
-        font-size: 1rem;
-        font-family: inherit;
-        transition: border-color 0.3s;
-    }
-
-    input[type="text"]:focus, input[type="password"]:focus {
-        outline: none;
-        border-color: #a855f7;
-    }
-
-    @media (max-width: 640px) {
-        input[type="text"], input[type="password"] {
-            padding: 0.625rem 0.875rem;
-            font-size: 0.875rem;
-        }
-    }
-</style>
 {% endblock %}
