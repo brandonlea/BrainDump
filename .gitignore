@@ -1,19 +1,41 @@
-# Django #
-*.log
-*.pot
+# Python
 *.pyc
-__pycache__
-db.sqlite3
-media
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
 
-# User
-.venv
-.idea/*
-*.iws
-*.iml
-*.ipr
-*.sqlite3
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+/media
+/staticfiles
+
+# Environment variables
 .env
-.env.local
-*.env
-staticfiles
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node modules (for Tailwind)
+node_modules/
+package-lock.json
+
+# Tailwind
+theme/static_src/node_modules/

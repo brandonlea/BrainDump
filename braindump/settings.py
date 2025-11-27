@@ -45,11 +45,14 @@ INSTALLED_APPS = [
 
     # Custom apps
     'posts',  # Main application for posts, comments, and voting
-
-    # Third-party apps
-    'tailwind',  # Tailwind CSS integration
-    'theme',     # Tailwind theme app
 ]
+
+# Only include Tailwind apps in development
+if DEBUG:
+    INSTALLED_APPS += [
+        'tailwind',  # Tailwind CSS integration
+        'theme',     # Tailwind theme app
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -166,11 +169,12 @@ LOGIN_URL = '/accounts/login/'
 
 
 # =============================================================================
-# TAILWIND CSS CONFIGURATION
+# TAILWIND CSS CONFIGURATION (Development Only)
 # =============================================================================
 
-TAILWIND_APP_NAME = 'theme'  # Name of the Tailwind theme app
-INTERNAL_IPS = ['127.0.0.1']  # Required for Tailwind hot reload in development
+if DEBUG:
+    TAILWIND_APP_NAME = 'theme'  # Name of the Tailwind theme app
+    INTERNAL_IPS = ['127.0.0.1']  # Required for Tailwind hot reload in development
 
 
 # =============================================================================
