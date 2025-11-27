@@ -45,14 +45,9 @@ INSTALLED_APPS = [
 
     # Custom apps
     'posts',  # Main application for posts, comments, and voting
+    'tailwind',  # Tailwind CSS integration
+    'theme',     # Tailwind theme app
 ]
-
-# Only include Tailwind apps in development
-if DEBUG:
-    INSTALLED_APPS += [
-        'tailwind',  # Tailwind CSS integration
-        'theme',     # Tailwind theme app
-    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
