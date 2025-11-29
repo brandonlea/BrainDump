@@ -1,23 +1,29 @@
-{% load static tailwind_tags %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="BrainDump - A community platform for sharing thoughts, stories, and ideas">
-    <meta name="author" content="Brandon-Lea">
-    <title>{% block title %}BrainDump{% endblock %}</title>
-    {% tailwind_css %}
+    <meta name="author" content="Brandon">
 
-    <!-- Custom Css -->
-    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <!-- Favicon links -->
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon.svg' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon.png' %}">
+
+    <title>{% block title %}BrainDump{% endblock %}</title>
+
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="{% static 'css/dist/styles.css' %}">
 </head>
 <body class="bg-gradient-to-br from-purple-600 via-pink-500 to-orange-500 min-h-screen">
     <!-- Main container with responsive padding -->
     <div class="container mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 max-w-7xl">
 
         <!-- Header with navigation - Accessible and responsive -->
-        <header class="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8" role="banner">
+        <header class="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8">
             <div class="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
                 <!-- Logo - Clickable, accessible -->
                 <div class="text-center sm:text-left">
@@ -30,7 +36,7 @@
                 </div>
 
                 <!-- Navigation menu - Accessible with proper ARIA labels -->
-                <nav class="flex items-center gap-2 sm:gap-4 flex-wrap justify-center" role="navigation" aria-label="Main navigation">
+                <nav class="flex items-center gap-2 sm:gap-4 flex-wrap justify-center" aria-label="Main navigation">
                     <a href="{% url 'post_list' %}"
                        class="text-gray-600 hover:text-purple-500 font-medium transition text-sm sm:text-base"
                        aria-label="Home page">
@@ -44,7 +50,8 @@
                                 aria-label="Create new post">
                             Dump Thoughts
                         </button>
-                        <span class="text-gray-600 text-xs sm:text-sm" aria-label="Logged in as {{ user.username }}">
+                        <span class="text-gray-600 text-xs sm:text-sm">
+                            <span class="sr-only">Logged in as</span>
                             👤 {{ user.username }}
                         </span>
                         <form method="post" action="{% url 'logout' %}" class="inline">
@@ -84,14 +91,14 @@
         {% endif %}
 
         <!-- Main content area with semantic HTML -->
-        <main class="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8" role="main">
+        <main class="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8">
             {% block content %}
             {% endblock %}
         </main>
 
         <!-- Footer with semantic HTML -->
-        <footer class="text-center text-white mt-6 sm:mt-8 py-4 sm:py-6" role="contentinfo">
-            <p class="font-medium text-sm sm:text-base">Made with 💜 by Brandon-Lea | 2025</p>
+        <footer class="text-center text-white mt-6 sm:mt-8 py-4 sm:py-6">
+            <p class="font-medium text-sm sm:text-base">Made with 💜 by Brandon | 2024</p>
             <p class="text-xs sm:text-sm mt-2 opacity-75">Level 5 Diploma - Unit 3: Back End Development</p>
         </footer>
     </div>
