@@ -9,6 +9,7 @@ This settings file is configured for both development and production environment
 It uses environment variables for sensitive data and includes security best practices.
 """
 
+import os
 from pathlib import Path
 from decouple import config, Csv
 import dj_database_url
