@@ -21,89 +21,83 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from django.db.models import Sum
+from django.db.models import Sum, Case, When, IntegerField
 from .models import Post, Comment, Vote
 from .forms import PostForm
 
 
 def post_list(request):
     """
-    Display the main feed with all posts and post creation form.
+    Display list of posts with optional category filtering.
 
-    This is the main view for the application, showing:
-    - All posts (or filtered by category)
-    - Post creation form for authenticated users
-    - Vote scores for each post
-    - Category filter sidebar
+    Shows all posts by default, or filters by category if specified in query params.
+    Authenticated users can create new posts via this view.
 
     Args:
-        request: HTTP request object
+        request: HttpRequest object
 
     Returns:
-        HttpResponse: Rendered template with post list and form
+        HttpResponse with rendered post list template
 
-    Template:
-        posts/post_list.html
-
+    Template: posts/post_list.html
     Context:
-        posts: QuerySet of Post objects with vote scores
-        categories: List of category choices for sidebar
-        selected_category: Currently selected category filter
-        form: PostForm for creating new posts
-        user_votes: Dict mapping post IDs to user's vote type
+        - posts: QuerySet of filtered Post objects
+        - form: PostForm for creating new posts (authenticated users only)
+        - categories: List of available category choices
+        - selected_category: Currently selected category filter
+        - user_votes: Dictionary mapping post IDs to user's vote values
     """
-    # Get all posts from database
-    posts = Post.objects.all()
+    # Get category from query parameter
+    selected_category = request.GET.get('category', 'everything')
 
-    # Apply category filter if provided in URL parameters
-    # Example: /?category=shower will show only shower thoughts
-    category = request.GET.get('category')
-    if category and category != 'everything':
-        posts = posts.filter(category=category)
+    # Filter posts by category if specified
+    if selected_category != 'everything':
+        posts = Post.objects.filter(category=selected_category).order_by('-created_at')
+    else:
+        posts = Post.objects.all().order_by('-created_at')
 
-    # Annotate each post with its total vote score
-    # vote_score = sum of all vote_type values (upvotes - downvotes)
-    posts = posts.annotate(vote_score=Sum('votes__vote_type'))
+    # Annotate posts with vote scores
+    posts = posts.annotate(
+        vote_score=Sum(
+            Case(
+                When(votes__vote_type=1, then=1),
+                When(votes__vote_type=-1, then=-1),
+                default=0,
+                output_field=IntegerField()
+            )
+        )
+    )
 
-    # Get user's votes for highlighting voted posts
-    # This creates a dictionary like {post_id: vote_type}
-    # Example: {1: 1, 3: -1} means upvoted post 1, downvoted post 3
+    # Get user's votes for all posts (for displaying vote button states)
     user_votes = {}
     if request.user.is_authenticated:
-        user_vote_objs = Vote.objects.filter(user=request.user, post__in=posts)
-        user_votes = {vote.post_id: vote.vote_type for vote in user_vote_objs}
+        votes = Vote.objects.filter(user=request.user, post__in=posts)
+        user_votes = {vote.post_id: vote.vote_type for vote in votes}
 
-    # Handle post creation form submission
-    # Only authenticated users can create posts
-    if request.method == 'POST' and request.user.is_authenticated:
-        form = PostForm(request.POST)
-        if form.is_valid():
-            # Don't save yet - we need to add the author
-            post = form.save(commit=False)
-            post.author = request.user
-            post.save()
+    # Handle post creation (POST request)
+    form = None
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = PostForm(request.POST)
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.author = request.user
+                post.save()
+                messages.success(request, '🎉 Your thought has been dumped!')
+                return redirect('post_list')
+        else:
+            form = PostForm()
 
-            # Show success message to user
-            messages.success(request, '🎉 Your thought has been dumped into the void!')
-            return redirect('post_list')
-    else:
-        # Display empty form for GET requests
-        form = PostForm()
-
-    # Get category choices for sidebar navigation
-    categories = Post.CATEGORY_CHOICES
-
-    # Prepare context data for template
+    # Build context
     context = {
         'posts': posts,
-        'categories': categories,
-        'selected_category': category or 'everything',
         'form': form,
+        'categories': dict(Post.CATEGORY_CHOICES),  # ← FIXED: Convert to dictionary
+        'selected_category': selected_category,
         'user_votes': user_votes,
     }
 
     return render(request, 'posts/post_list.html', context)
-
 
 def post_detail(request, pk):
     """
