@@ -21,7 +21,7 @@
                 </li>
 
                 <!-- Loop through categories -->
-                {% for value, label in categories %}
+                {% for value, label in categories.items %}
                 <li>
                     <a href="?category={{ value }}"
                        class="block px-3 sm:px-4 py-2 sm:py-3 rounded-lg transition {% if selected_category == value %}bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %} text-sm sm:text-base">
