@@ -1,11 +1,19 @@
 """
 URL configuration for the posts app.
-Maps URL patterns to their corresponding views.
+
+Maps URL patterns to their corresponding views for all post-related
+functionality including CRUD operations, voting, and commenting.
+
+Author: Brandon-lea
+Date: 2025
+Project: BrainDump - Level 5 Diploma Unit 3
 """
 
 from django.urls import path
 from . import views
 
+# URL patterns for posts app
+# All patterns use descriptive names for reverse URL lookup
 urlpatterns = [
     # Main feed and post creation
     path('', views.post_list, name='post_list'),
@@ -24,8 +32,16 @@ urlpatterns = [
     path('post/<int:pk>/downvote/', views.downvote_post, name='downvote_post'),
 
     # Voting from main feed
-    path('feed/post/<int:pk>/upvote/', views.upvote_post_feed, name='upvote_post_feed'),
-    path('feed/post/<int:pk>/downvote/', views.downvote_post_feed, name='downvote_post_feed'),
+    path(
+        'feed/post/<int:pk>/upvote/',
+        views.upvote_post_feed,
+        name='upvote_post_feed'
+    ),
+    path(
+        'feed/post/<int:pk>/downvote/',
+        views.downvote_post_feed,
+        name='downvote_post_feed'
+    ),
 
     # Authentication
     path('register/', views.register_view, name='register'),

@@ -1,18 +1,26 @@
 """
-Custom template filters for the BrainDump application.
-Provides filters for accessing dictionary values in templates.
+Custom template filters for BrainDump application.
+
+Provides utility filters for use in Django templates.
 """
 
 from django import template
 
 register = template.Library()
 
-@register.filter(name='get_item')
+
+@register.filter
 def get_item(dictionary, key):
     """
-    Get an item from a dictionary using a key.
-    Usage: {{ dict|get_item:key }}
+    Get item from dictionary by key in templates.
+
+    Usage in template: {{ my_dict|get_item:my_key }}
+
+    Args:
+        dictionary: Dictionary to access
+        key: Key to look up
+
+    Returns:
+        Value from dictionary or None if key not found
     """
-    if dictionary:
-        return dictionary.get(key)
-    return None
+    return dictionary.get(key)

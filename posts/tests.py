@@ -1,3 +1,10 @@
-from django.test import TestCase
+"""
+Tests for the BrainDump application.
 
-# Create your tests here.
+Placeholder for future test cases.
+"""
+
+# Tests will be added here
+# Example:
+# from django.test import TestCase
+# from .models import Post
