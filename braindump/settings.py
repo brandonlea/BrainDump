@@ -30,6 +30,9 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 # Allowed hosts: Configured via environment variable
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
 
+# Check if we're in production environment (not just DEBUG=False for local testing)
+IS_PRODUCTION = config('IS_PRODUCTION', default=False, cast=bool)
+
 
 # =============================================================================
 # APPLICATION DEFINITION
@@ -143,15 +146,28 @@ STATICFILES_DIRS = [
 ]
 
 # Storage configuration for static files
-STORAGES = {
-    "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-    },
-    "staticfiles": {
-        # Use Whitenoise for production static file serving with compression
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
+# Use ManifestStaticFilesStorage in development/testing to allow missing files
+# Switch to CompressedManifestStaticFilesStorage in production
+if DEBUG or not IS_PRODUCTION:
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            # Use regular static files storage when not in production
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
+else:
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            # Use Whitenoise for production static file serving with compression
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
 
 
 # =============================================================================
@@ -177,7 +193,7 @@ if DEBUG:
 # SECURITY SETTINGS (Production Only)
 # =============================================================================
 
-if not DEBUG:
+if not DEBUG and IS_PRODUCTION:
     # HTTPS/SSL Settings
     SECURE_SSL_REDIRECT = True  # Redirect all HTTP to HTTPS
     SESSION_COOKIE_SECURE = True  # Send session cookie only over HTTPS
@@ -199,3 +215,34 @@ if not DEBUG:
 # =============================================================================
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# =============================================================================
+# LOGGING CONFIGURATION (for debugging when DEBUG=False)
+# =============================================================================
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    },
+}
