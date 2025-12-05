@@ -51,8 +51,8 @@
                    name="password2"
                    id="id_password2"
                    required
-                   class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none font-medium text-sm sm:text-base"
-                   aria-describedby="{% if form.password2.errors %}id_password2_error{% endif %}">
+                   class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none font-medium text-sm sm:text-base"{% if form.password2.errors %}
+                   aria-describedby="id_password2_error"{% endif %}>
             {% if form.password2.errors %}
                 <p id="id_password2_error" class="text-red-500 text-xs sm:text-sm mt-1" role="alert">{{ form.password2.errors.0 }}</p>
             {% endif %}
