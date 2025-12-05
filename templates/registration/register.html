@@ -15,30 +15,46 @@
         
         <!-- Username field -->
         <div>
-            <label class="block text-gray-700 font-bold mb-2 text-sm sm:text-base">Username</label>
-            {{ form.username }}
+            <label for="id_username" class="block text-gray-700 font-bold mb-2 text-sm sm:text-base">Username</label>
+            <input type="text"
+                   name="username"
+                   id="id_username"
+                   maxlength="150"
+                   required
+                   class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none font-medium text-sm sm:text-base"
+                   aria-describedby="id_username_helptext{% if form.username.errors %} id_username_error{% endif %}">
             {% if form.username.errors %}
-                <p class="text-red-500 text-xs sm:text-sm mt-1">{{ form.username.errors.0 }}</p>
+                <p id="id_username_error" class="text-red-500 text-xs sm:text-sm mt-1" role="alert">{{ form.username.errors.0 }}</p>
             {% endif %}
-            <p class="text-gray-500 text-xs mt-1">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</p>
+            <p id="id_username_helptext" class="text-gray-500 text-xs mt-1">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</p>
         </div>
 
         <!-- Password field -->
         <div>
-            <label class="block text-gray-700 font-bold mb-2 text-sm sm:text-base">Password</label>
-            {{ form.password1 }}
+            <label for="id_password1" class="block text-gray-700 font-bold mb-2 text-sm sm:text-base">Password</label>
+            <input type="password"
+                   name="password1"
+                   id="id_password1"
+                   required
+                   class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none font-medium text-sm sm:text-base"
+                   aria-describedby="id_password1_helptext{% if form.password1.errors %} id_password1_error{% endif %}">
             {% if form.password1.errors %}
-                <p class="text-red-500 text-xs sm:text-sm mt-1">{{ form.password1.errors.0 }}</p>
+                <p id="id_password1_error" class="text-red-500 text-xs sm:text-sm mt-1" role="alert">{{ form.password1.errors.0 }}</p>
             {% endif %}
-            <p class="text-gray-500 text-xs mt-1">Your password must contain at least 8 characters and can't be too common.</p>
+            <p id="id_password1_helptext" class="text-gray-500 text-xs mt-1">Your password must contain at least 8 characters and can't be too common.</p>
         </div>
 
         <!-- Password confirmation field -->
         <div>
-            <label class="block text-gray-700 font-bold mb-2 text-sm sm:text-base">Confirm Password</label>
-            {{ form.password2 }}
+            <label for="id_password2" class="block text-gray-700 font-bold mb-2 text-sm sm:text-base">Confirm Password</label>
+            <input type="password"
+                   name="password2"
+                   id="id_password2"
+                   required
+                   class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none font-medium text-sm sm:text-base"
+                   aria-describedby="{% if form.password2.errors %}id_password2_error{% endif %}">
             {% if form.password2.errors %}
-                <p class="text-red-500 text-xs sm:text-sm mt-1">{{ form.password2.errors.0 }}</p>
+                <p id="id_password2_error" class="text-red-500 text-xs sm:text-sm mt-1" role="alert">{{ form.password2.errors.0 }}</p>
             {% endif %}
         </div>
 
