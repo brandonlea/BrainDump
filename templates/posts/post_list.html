@@ -39,9 +39,7 @@
             {% if selected_category == 'everything' %}
                 All Thoughts
             {% else %}
-                <!-- Temporarily simplified -->
-                {{ selected_category|title }}
-                <!-- {{ categories|get_item:selected_category }} -->
+                {{ selected_category_label }}
             {% endif %}
         </h2>
 

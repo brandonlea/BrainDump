@@ -27,26 +27,7 @@ from .forms import PostForm
 
 
 def post_list(request):
-    """
-    Display list of posts with optional category filtering.
-
-    Shows all posts by default, or filters by category if specified in query params.
-    Authenticated users can create new posts via this view.
-
-    Args:
-        request: HttpRequest object
-
-    Returns:
-        HttpResponse with rendered post list template
-
-    Template: posts/post_list.html
-    Context:
-        - posts: QuerySet of filtered Post objects
-        - form: PostForm for creating new posts (authenticated users only)
-        - categories: List of available category choices
-        - selected_category: Currently selected category filter
-        - user_votes: Dictionary mapping post IDs to user's vote values
-    """
+    """Display list of posts with optional category filtering."""
     # Get category from query parameter
     selected_category = request.GET.get('category', 'everything')
 
@@ -68,13 +49,13 @@ def post_list(request):
         )
     )
 
-    # Get user's votes for all posts (for displaying vote button states)
+    # Get user's votes for all posts
     user_votes = {}
     if request.user.is_authenticated:
         votes = Vote.objects.filter(user=request.user, post__in=posts)
         user_votes = {vote.post_id: vote.vote_type for vote in votes}
 
-    # Handle post creation (POST request)
+    # Handle post creation
     form = None
     if request.user.is_authenticated:
         if request.method == 'POST':
@@ -88,17 +69,25 @@ def post_list(request):
         else:
             form = PostForm()
 
+    # Get selected category label
+    selected_category_label = None
+    if selected_category != 'everything':
+        for value, label in Post.CATEGORY_CHOICES:
+            if value == selected_category:
+                selected_category_label = label
+                break
+
     # Build context
     context = {
         'posts': posts,
         'form': form,
-        'categories': dict(Post.CATEGORY_CHOICES),  # ← FIXED: Convert to dictionary
+        'categories': Post.CATEGORY_CHOICES,  # Keep as list
         'selected_category': selected_category,
+        'selected_category_label': selected_category_label,  # NEW!
         'user_votes': user_votes,
     }
 
     return render(request, 'posts/post_list.html', context)
-
 
 def post_detail(request, pk):
     """
