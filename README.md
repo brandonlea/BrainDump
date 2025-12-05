@@ -1,5 +1,7 @@
 # BrainDump
 
+![Devices](docs/screenshot/devices.png)
+
 BrainDump is a full-stack community discussion platform built with Django and Python where users can share thoughts, stories, and ideas in a playful, modern environment. The application features voting, commenting, category filtering, and user authentication.
 
 
