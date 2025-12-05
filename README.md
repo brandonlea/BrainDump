@@ -31,6 +31,12 @@ BrainDump is a full-stack community discussion platform built with Django and Py
   - [Frameworks and Libraries](#frameworks-and-libraries)
   - [Database](#database)
   - [Tools](#tools)
+- [Testing](#testing)
+  - [Manual Testing](#manual-testing)
+  - [Code Validation](#code-validation)
+  - [Responsive Testing](#responsive-testing)
+  - [Accessibility Testing](#accessibility-testing)
+  - [Bug Tracking](#bug-tracking)
 - [Deployment](#deployment)
   - [Local Development](#local-development)
   - [Heroku Deployment](#heroku-deployment)
@@ -665,6 +671,238 @@ Django's default `auth_user` table with fields:
 **Deployment:**
 - [Heroku](https://www.heroku.com/) - Cloud platform for hosting
 - [Heroku PostgreSQL](https://www.heroku.com/postgres) - Managed database service
+
+[Back to Top](#contents)
+
+---
+
+## Testing
+
+### Manual Testing
+
+Comprehensive manual testing was performed across all features to ensure functionality, usability, and reliability.
+
+#### Authentication Testing
+
+| Test Case | Steps | Expected Result | Actual Result | Status |
+|-----------|-------|----------------|---------------|--------|
+| User Registration | 1. Navigate to /register/<br>2. Fill form with valid data<br>3. Submit | Account created, auto-logged in, redirected to feed | Account created successfully | ✅ PASS |
+| Duplicate Username | 1. Register with existing username | Error: "Username already exists" | Error displayed correctly | ✅ PASS |
+| Weak Password | 1. Register with password "123" | Error: "Password too simple" | Validation error shown | ✅ PASS |
+| User Login (Valid) | 1. Navigate to /login/<br>2. Enter correct credentials<br>3. Submit | Logged in, redirected to previous page | Login successful | ✅ PASS |
+| User Login (Invalid) | 1. Enter wrong password<br>2. Submit | Error: "Invalid credentials" | Error displayed | ✅ PASS |
+| Logout | 1. Click logout button | Logged out, redirected to home | Logout successful | ✅ PASS |
+
+#### Post CRUD Testing
+
+| Test Case | Steps | Expected Result | Actual Result | Status |
+|-----------|-------|----------------|---------------|--------|
+| Create Post (Logged In) | 1. Click "Dump Thoughts"<br>2. Fill all fields<br>3. Submit | Post created, appears in feed | Post created successfully | ✅ PASS |
+| Create Post (Logged Out) | 1. Navigate to /posts/create/ | Redirected to login page | Redirected correctly | ✅ PASS |
+| Empty Title Validation | 1. Submit form with empty title | Error: "This field is required" | Validation error shown | ✅ PASS |
+| View Post Detail | 1. Click post title | Post detail page loads | Full content displays | ✅ PASS |
+| Edit Own Post | 1. Click "Edit" on own post<br>2. Change content<br>3. Submit | Post updated successfully | Post updated | ✅ PASS |
+| Edit Other's Post | 1. Navigate to /posts/<id>/edit/ for another user | 403 Forbidden error | 403 error displayed | ✅ PASS |
+| Delete Own Post | 1. Click "Delete"<br>2. Confirm | Post deleted, redirected | Post deleted successfully | ✅ PASS |
+| Delete Other's Post | 1. Attempt to delete another user's post | 403 Forbidden error | 403 error displayed | ✅ PASS |
+
+#### Commenting Testing
+
+| Test Case | Steps | Expected Result | Actual Result | Status |
+|-----------|-------|----------------|---------------|--------|
+| Add Comment (Logged In) | 1. Enter comment text<br>2. Click "Post" | Comment appears below post | Comment added | ✅ PASS |
+| Add Comment (Logged Out) | 1. Visit post detail page | Comment form not visible | Form hidden | ✅ PASS |
+| Empty Comment | 1. Submit empty comment form | Validation error displayed | Error shown | ✅ PASS |
+| Edit Comment | 1. Click "Edit" on own comment<br>2. Change text<br>3. Submit | Comment updated | Comment updated | ✅ PASS |
+| Delete Comment | 1. Click "Delete"<br>2. Confirm | Comment deleted | Comment removed | ✅ PASS |
+
+#### Voting Testing
+
+| Test Case | Steps | Expected Result | Actual Result | Status |
+|-----------|-------|----------------|---------------|--------|
+| Upvote Post | 1. Click upvote button | Count increases by 1, button highlighted | Vote registered | ✅ PASS |
+| Downvote Post | 1. Click downvote button | Count decreases by 1, button highlighted | Vote registered | ✅ PASS |
+| Un-vote | 1. Upvote post<br>2. Click upvote again | Vote removed, count decreases | Vote removed | ✅ PASS |
+| Change Vote | 1. Upvote post<br>2. Click downvote | Vote changed, net change -2 | Vote changed | ✅ PASS |
+| Vote on Own Post | 1. Try to vote on own post | Error: "Can't vote on your own post" | Error displayed | ✅ PASS |
+| Vote Without Login | 1. Click vote while logged out | Redirected to login | Redirect works | ✅ PASS |
+
+#### Category Filtering
+
+| Test Case | Steps | Expected Result | Actual Result | Status |
+|-----------|-------|----------------|---------------|--------|
+| Filter by Category | 1. Click "Pet Nonsense" | Only that category shown | Filtered correctly | ✅ PASS |
+| Category Count | 1. View sidebar | Accurate post counts | Counts correct | ✅ PASS |
+| "Everything" Filter | 1. Click "Everything" | All posts visible | All posts shown | ✅ PASS |
+| Filter Persistence | 1. Select category<br>2. Refresh page | Filter still applied | Filter persisted | ✅ PASS |
+
+[Back to Top](#contents)
+
+---
+
+### Code Validation
+
+#### HTML Validation
+
+**Tool:** [W3C Markup Validation Service](https://validator.w3.org/)
+
+![Home](docs/html-validation/home.png)
+![Login](docs/html-validation/login.png)
+![Register](docs/html-validation/register.png)
+![Post](docs/html-validation/post.png)
+![Edit Post](docs/html-validation/edit.png)
+
+| Page | Errors | Warnings | Result |
+|------|--------|----------|--------|
+| Home/Feed | 0 | 0 | ✅ PASS |
+| Post Detail | 0 | 0 | ✅ PASS |I
+| Edit Post | 0 | 0 | ✅ PASS |
+| Login | 0 | 0 | ✅ PASS |
+| Register | 0 | 0 | ✅ PASS |
+
+All HTML pages validated successfully with no errors.
+
+#### CSS Validation
+
+**Tool:** [W3C CSS Validator (Jigsaw)](https://jigsaw.w3.org/css-validator/)
+
+![CSS Validation](docs/css-validation/css-validation.png)
+
+**Result:** ✅ 0 errors (warnings only for vendor prefixes in Tailwind CSS)
+
+#### JavaScript Validation
+
+**Tool:** [JSHint](https://jshint.com/)
+
+![JS Validation](docs/js-validation/js-validation.png)
+
+**Result:** ✅ 0 errors (ES6 syntax warnings expected and acceptable)
+
+#### Python Validation
+
+**Tool:** Flake8 (PEP8 compliance checker)
+
+![Python Validation](docs/python-validation/python-validation.png)
+
+**Command:**
+```
+flake8 --exclude=migrations,venv,env,.venv --max-line-length=119
+```
+
+**Result:** ✅ All files pass PEP8 standards
+
+**Compliance:**
+- Line length max 119 characters (Django standard)
+- 4-space indentation
+- Proper import ordering
+- Meaningful variable names
+- Docstrings for functions and classes
+
+[Back to Top](#contents)
+
+---
+
+### Responsive Testing
+
+Testing was conducted on real devices and browser developer tools to ensure proper display and functionality across all screen sizes.
+
+| Device | Screen Size | Navigation | Alignment | Content | Functionality | Issues |
+|--------|-------------|------------|-----------|---------|---------------|--------|
+| iPhone SE | 375x667 | Good | Good | Good | Good | None |
+| iPhone 12 Pro | 390x844 | Good | Good | Good | Good | None |
+| Samsung Galaxy S21 | 360x800 | Good | Good | Good | Good | None |
+| iPad Mini | 768x1024 | Good | Good | Good | Good | None |
+| iPad Air | 820x1180 | Good | Good | Good | Good | None |
+| iPad Pro 12.9" | 1024x1366 | Good | Good | Good | Good | None |
+| MacBook Air 13" | 1440x900 | Good | Good | Good | Good | None |
+| MacBook Pro 16" | 1728x1117 | Good | Good | Good | Good | None |
+| Desktop 1080p | 1920x1080 | Good | Good | Good | Good | None |
+| Desktop 4K | 2560x1440 | Good | Good | Good | Good | None |
+
+**Verified Features:**
+- ✅ Single column layout on mobile
+- ✅ Two-column layout on tablet
+- ✅ Three-column layout on desktop
+- ✅ Readable text at all sizes
+- ✅ Touch targets meet minimum 44x44px
+- ✅ No horizontal scrolling at any width
+- ✅ Images scale proportionally
+
+[Back to Top](#contents)
+
+---
+
+### Accessibility Testing
+
+#### WAVE Report
+
+**Tool:** [WAVE Web Accessibility Evaluation Tool](https://wave.webaim.org/)
+
+![WAVE Report](docs/wave/wave.png)
+
+| Page | Errors | Contrast Errors | Alerts | Result |
+|------|--------|-----------------|--------|--------|
+| Home | 0 | 0 | 1 | ✅ PASS |
+| Post Detail | 0 | 0 | 2 | ✅ PASS |
+| Create Post | 0 | 0 | 0 | ✅ PASS |
+| Login | 0 | 0 | 0 | ✅ PASS |
+
+Alerts are for redundant links (intentional for UX).
+
+#### Lighthouse Audit
+
+**Tool:** Chrome DevTools Lighthouse
+
+![Lighthouse Desktop](docs/lighthouse/lighthouse-desktop.png)
+![Lighthouse Mobile](docs/lighthouse/lighthouse-mobile.png)
+
+**Desktop Results:**
+- Performance: 99/100 ✅
+- Accessibility: 100/100 ✅
+- Best Practices: 100/100 ✅
+- SEO: 100/100 ✅
+
+**Mobile Results:**
+- Performance: 99/100 ✅
+- Accessibility: 100/100 ✅
+- Best Practices: 100/100 ✅
+- SEO: 100/100 ✅
+
+#### Screen Reader Testing
+
+**Tools:** NVDA (Windows), VoiceOver (macOS)
+
+**Verified:**
+- ✅ All headings announced correctly
+- ✅ Form labels associated properly
+- ✅ Navigation landmarks recognized
+- ✅ Dynamic content changes announced
+- ✅ Error messages announced immediately
+
+[Back to Top](#contents)
+
+---
+
+### Bug Tracking
+
+#### Fixed Bugs
+
+| Bug ID | Description | Solution | Status |
+|--------|-------------|----------|--------|
+| BUG-001 | Vote count not updating immediately | Added AJAX for instant updates | ✅ FIXED |
+| BUG-002 | Users could vote multiple times | Added database constraint | ✅ FIXED |
+| BUG-003 | Deleting post didn't delete comments | Changed to CASCADE delete | ✅ FIXED |
+| BUG-004 | CSRF token expiring after 1 hour | Implemented token refresh | ✅ FIXED |
+| BUG-005 | Mobile menu not closing after click | Fixed JavaScript event listener | ✅ FIXED |
+| BUG-006 | Category badge text overflow | Added text truncation | ✅ FIXED |
+| BUG-007 | Timestamps showing "NaN" | Fixed date parsing logic | ✅ FIXED |
+
+#### Known Issues
+
+| Bug ID | Description | Impact | Workaround | Priority |
+|--------|-------------|--------|------------|----------|
+| BUG-011 | Vote animation lags on slow connections | Low | None needed | P3 |
+| BUG-012 | Very long titles overflow on <320px | Very Low | Title truncation | P4 |
 
 [Back to Top](#contents)
 

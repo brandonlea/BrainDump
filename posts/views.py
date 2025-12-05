@@ -99,6 +99,7 @@ def post_list(request):
 
     return render(request, 'posts/post_list.html', context)
 
+
 def post_detail(request, pk):
     """
     Display a single post with all its comments.
