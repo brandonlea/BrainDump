@@ -206,7 +206,7 @@ if not DEBUG and IS_PRODUCTION:
     # Additional Security Headers
     SECURE_BROWSER_XSS_FILTER = True  # Enable XSS filter
     SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent MIME type sniffing
-    X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking
+    # X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking
 
 
 # =============================================================================
