@@ -1274,6 +1274,7 @@ SECRET_KEY=your-secret-key-here
 DEBUG=True
 DATABASE_URL=sqlite:///db.sqlite3
 ALLOWED_HOSTS=localhost,127.0.0.1
+IS_PRODUCTION=False
 ```
 
 Generate a SECRET_KEY using Django's utility or online generator.
@@ -1351,6 +1352,7 @@ This adds a free PostgreSQL database to your app.
 heroku config:set SECRET_KEY=your-production-secret-key
 heroku config:set DEBUG=False
 heroku config:set ALLOWED_HOSTS=braindump-yourname.herokuapp.com
+heroku config:set IS_PRODUCTION=True
 ```
 
 Generate a different SECRET_KEY for production.
@@ -1456,6 +1458,7 @@ Environment variables keep sensitive information secure and allow different conf
 | DEBUG | Enable/disable debug mode | True | False |
 | DATABASE_URL | Database connection string | sqlite:///db.sqlite3 | Heroku PostgreSQL URL |
 | ALLOWED_HOSTS | Comma-separated allowed hostnames | localhost,127.0.0.1 | yourapp.herokuapp.com |
+| IS_PRODUCTION | Flag for production environment | False | True |
 
 **Setting Variables Locally:**
 
@@ -1465,6 +1468,7 @@ SECRET_KEY=your-key-here
 DEBUG=True
 DATABASE_URL=sqlite:///db.sqlite3
 ALLOWED_HOSTS=localhost,127.0.0.1
+IS_PRODUCTION=False
 ```
 
 Add `.env` to `.gitignore` to prevent committing secrets.
@@ -1474,6 +1478,7 @@ Add `.env` to `.gitignore` to prevent committing secrets.
 ```
 heroku config:set SECRET_KEY=your-key-here
 heroku config:set DEBUG=False
+heroku config:set IS_PRODUCTION=True
 ```
 
 View all variables:
