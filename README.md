@@ -1644,7 +1644,7 @@ All common vulnerabilities tested and blocked.
 
 **Deployment:**
 - [Heroku](https://www.heroku.com/) - Cloud platform
-- [Heroku PostgreSQL](https://www.heroku.com/postgres) - Database hosting
+- [PostgreSQL](https://www.heroku.com/postgres) - Database hosting
 
 ### Media & Content
 
